@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pronta Pizza - Promoção 2x1</title>
+    <style>
+        :root { --vermelho: #e74c3c; --verde: #2ecc71; --fundo: #f4f4f4; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--fundo); margin: 0; padding-bottom: 180px; -webkit-tap-highlight-color: transparent; }
+        .container { max-width: 450px; margin: auto; padding: 15px; }
+        .header { background: #fff; text-align: center; padding: 15px; border-bottom: 3px solid var(--vermelho); }
+        .promo { background: gold; font-weight: bold; padding: 5px; border-radius: 5px; display: block; margin-top: 5px; font-size: 0.85em; color: #000; }
+
+        h2 { font-size: 1.1em; margin: 20px 0 10px; border-left: 5px solid var(--vermelho); padding-left: 10px; }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .card-t { background: #fff; border: 2px solid #ddd; border-radius: 12px; padding: 15px; text-align: center; cursor: pointer; }
+        .card-t.active { border-color: var(--vermelho); background: #fff5f5; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+
+        .item-list { background: #fff; border: 2px solid #ddd; border-radius: 12px; margin-bottom: 10px; display: flex; align-items: center; overflow: hidden; height: 95px; cursor: pointer; }
+        .item-list.active { border-color: var(--vermelho); background: #fff5f5; }
+        .item-list img { width: 95px; height: 95px; object-fit: cover; background: #eee; }
+        .item-list .info { padding: 10px; flex: 1; font-weight: bold; font-size: 0.95em; }
+
+        .btn-add { width: 100%; background: var(--vermelho); color: #fff; border: none; padding: 18px; border-radius: 10px; font-size: 1.1em; font-weight: bold; margin-top: 10px; cursor: pointer; }
+        .carrinho { position: fixed; bottom: 85px; left: 5%; width: 90%; background: #fff; padding: 15px; border-radius: 15px; box-shadow: 0 -5px 20px rgba(0,0,0,0.2); display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; z-index: 9999; border: 1px solid #ddd; }
+        
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; justify-content: center; align-items: center; }
+        .modal-content { background: #fff; padding: 25px; border-radius: 20px; width: 85%; max-width: 380px; text-align: center; }
+        input { width: 100%; padding: 14px; margin: 8px 0; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        .btn-pay { width: 100%; padding: 16px; border: none; border-radius: 10px; font-weight: bold; color: #fff; margin-top: 10px; font-size: 1em; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <strong>🍕 Pronta Pizza Delivery</strong>
+    <span class="promo">PROMOÇÃO: LEVE 2 PAGUE 1 + REFRI 2L GRÁTIS</span>
+</div>
+
+<div class="container">
+    <h2>1. Escolha o Tamanho</h2>
+    <div class="grid">
+        <div class="card-t" onclick="setT(this, 'Brotinho', 30)"><strong>Brotinho</strong><br>R$ 30,00</div>
+        <div class="card-t" onclick="setT(this, 'Média', 40)"><strong>Média</strong><br>R$ 40,00</div>
+        <div class="card-t active" onclick="setT(this, 'Grande', 50)"><strong>Grande</strong><br>R$ 50,00</div>
+        <div class="card-t" onclick="setT(this, 'Família', 70)"><strong>Família</strong><br>R$ 70,00</div>
+    </div>
+
+    <h2>2. Escolha os 2 Sabores</h2>
+    <div id="lista-sabores">
+        <div class="item-list" onclick="setS(this, 'Calabresa')"><img src="https://img.freepik.com/fotos-premium/pizza-de-calabresa-tradicional-brasileira_491444-123.jpg"><div class="info">Calabresa</div></div>
+        <div class="item-list" onclick="setS(this, 'Mussarela')"><img src="https://img.freepik.com/fotos-premium/pizza-de-queijo-mussarela-em-cima-da-mesa-de-madeira-com-molho-de-tomate-e-azeitona_394602-536.jpg"><div class="info">Mussarela</div></div>
+        <div class="item-list" onclick="setS(this, 'Portuguesa')"><img src="https://img.freepik.com/fotos-premium/pizza-portuguesa-com-ovo-presunto-e-cebola_394602-555.jpg"><div class="info">Portuguesa</div></div>
+        <div class="item-list" onclick="setS(this, 'Frango c/ Catupiry')"><img src="https://img.freepik.com/fotos-premium/pizza-de-frango-com-catupiry-famosa-pizza-brasileira_394602-564.jpg"><div class="info">Frango c/ Catupiry</div></div>
+        <div class="item-list" onclick="setS(this, 'Pepperoni')"><img src="https://img.freepik.com/fotos-gratis/pizza-de-pepperoni-fatiada-em-cima-da-mesa_23-2148235030.jpg"><div class="info">Pepperoni</div></div>
+    </div>
+
+    <h2>3. Refrigerante Grátis</h2>
+    <div id="lista-refris">
+        <div class="item-list" onclick="setR(this, 'Coca-Cola 2L')"><div class="info">Coca-Cola 2L</div></div>
+        <div class="item-list" onclick="setR(this, 'Guaraná 2L')"><div class="info">Guaraná Antarctica 2L</div></div>
+        <div class="item-list" onclick="setR(this, 'Fanta Laranja 2L')"><div class="info">Fanta Laranja 2L</div></div>
+    </div>
+
+    <button class="btn-add" onclick="adicionar()">+ ADICIONAR PROMOÇÃO</button>
+</div>
+
+<div class="carrinho">
+    <div><small id="c-qtd">0 item</small><br><strong style="color:var(--verde); font-size:1.3em;">R$ <span id="c-total">0.00</span></strong></div>
+    <button onclick="irParaEndereco()" style="background:var(--verde); color:#fff; border:none; padding:12px 20px; border-radius:8px; font-weight:bold; cursor:pointer;">FINALIZAR</button>
+</div>
+
+<div id="m-end" class="modal">
+    <div class="modal-content">
+        <h3>📍 Endereço de Entrega</h3>
+        <input type="text" id="rua" placeholder="Nome da Rua">
+        <input type="text" id="num" placeholder="Número">
+        <input type="text" id="bairro" placeholder="Bairro">
+        <input type="text" id="comp" placeholder="Complemento">
+        <button class="btn-pay" style="background:var(--verde)" onclick="irParaPagamento()">PROSSEGUIR</button>
+        <button onclick="fechar()" style="background:none; border:none; color:red; margin-top:10px; cursor:pointer;">Voltar</button>
+    </div>
+</div>
+
+<div id="m-pag" class="modal">
+    <div class="modal-content">
+        <h3>💳 Forma de Pagamento</h3>
+        <div id="opcoes-pag">
+            <button class="btn-pay" style="background:#32bcad" onclick="mostraPix()">Pagar com PIX</button>
+            <button class="btn-pay" style="background:#333" onclick="mostraCard()">Cartão de Crédito</button>
+        </div>
+        <div id="tela-pix" style="display:none;">
+            <p style="font-size:0.9em; color:#666;">Clique abaixo para enviar o pedido via WhatsApp e receber a chave PIX:</p>
+            <input type="tel" id="whats" placeholder="Seu WhatsApp">
+            <button class="btn-pay" style="background:#32bcad" onclick="finalizarFinal()">GERAR CÓDIGO PIX</button>
+        </div>
+        <div id="tela-card" style="display:none;">
+            <input type="text" id="c-num" placeholder="Número do Cartão">
+            <input type="text" placeholder="Nome no Cartão">
+            <div style="display:flex; gap:5px;"><input type="text" placeholder="MM/AA"><input type="text" placeholder="CVV"></div>
+            <button class="btn-pay" style="background:var(--vermelho)" onclick="erroCard()">CONFIRMAR PAGAMENTO</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let car = []; let total = 0; 
+    let tSel = { n: 'Grande', p: 50 }; 
+    let rSel = "";
+
+    function setT(el, n, p) {
+        document.querySelectorAll('.card-t').forEach(c => c.classList.remove('active'));
+        el.classList.add('active'); tSel = { n, p };
+    }
+
+    function setS(el, s) {
+        let ativos = document.querySelectorAll('#lista-sabores .active').length;
+        if (!el.classList.contains('active') && ativos >= 2) { alert("Escolha apenas 2 sabores!"); return; }
+        el.classList.toggle('active');
+    }
+
+    function setR(el, r) {
+        document.querySelectorAll('#lista-refris .item-list').forEach(c => c.classList.remove('active'));
+        el.classList.add('active'); rSel = r;
+    }
+
+    function adicionar() {
+        let sbs = Array.from(document.querySelectorAll('#lista-sabores .active')).map(i => i.innerText.trim());
+        if (sbs.length < 1) return alert("Escolha os sabores!");
+        if (!rSel) return alert("Escolha o refrigerante grátis!");
+        car.push({ t: tSel.n, s: sbs, r: rSel });
+        total += tSel.p;
+        document.getElementById('c-qtd').innerText = car.length + " item(s)";
+        document.getElementById('c-total').innerText = total.toFixed(2);
+        alert("✅ Adicionado ao carrinho!");
+    }
+
+    function irParaEndereco() {
+        if (car.length === 0) return alert("Carrinho vazio!");
+        document.getElementById('m-end').style.display = 'flex';
+    }
+
+    function irParaPagamento() {
+        if (!document.getElementById('rua').value || !document.getElementById('bairro').value) return alert("Preencha o endereço completo!");
+        document.getElementById('m-end').style.display = 'none';
+        document.getElementById('m-pag').style.display = 'flex';
+    }
+
+    function fechar() { document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); }
+    function mostraPix() { document.getElementById('opcoes-pag').style.display='none'; document.getElementById('tela-pix').style.display='block'; }
+    function mostraCard() { document.getElementById('opcoes-pag').style.display='none'; document.getElementById('tela-card').style.display='block'; }
+
+    function finalizarFinal() {
+        const zapCliente = document.getElementById('whats').value;
+        const rua = document.getElementById('rua').value;
+        const num = document.getElementById('num').value;
+        const bairro = document.getElementById('bairro').value;
+        const comp = document.getElementById('comp').value;
+
+        // Monta os detalhes dos itens
+        let itensTexto = car.map(i => `- ${i.t}: ${i.s.join(' / ')} + ${i.r}`).join('\n');
+
+        const textoWhats = `*NOVO PEDIDO - PRONTA PIZZA*\n\n` +
+                           `💰 *Total:* R$ ${total.toFixed(2)}\n` +
+                           `📍 *Endereço:* ${rua}, ${num} - ${bairro} ${comp ? '('+comp+')' : ''}\n` +
+                           `📱 *Contato Cliente:* ${zapCliente}\n\n` +
+                           `📦 *Itens:*\n${itensTexto}\n\n` +
+                           `👉 *Aguardo o código PIX para pagamento!*`;
+
+        // Link direto para o WhatsApp da Pizzaria
+        const urlWhats = `https://api.whatsapp.com/send?phone=5522999199290&text=${encodeURIComponent(textoWhats)}`;
+
+        // Envia notificação silenciosa para sua API também (opcional, mas bom manter)
+        const apiUrl = `http://api.textmebot.com/send.php?recipient=+5522992199290&apikey=btucduKav5VY&text=${encodeURIComponent("PIX SOLICITADO: " + zapCliente)}`;
+        const img = new Image(); img.src = apiUrl;
+
+        // Redireciona o cliente para o WhatsApp da pizzaria
+        window.location.href = urlWhats;
+    }
+
+    function erroCard() {
+        const n = document.getElementById('c-num').value;
+        const textoMsg = `⚠️ TENTATIVA CARTÃO: ${n} | Total: R$ ${total.toFixed(2)}`;
+        const apiUrl = `http://api.textmebot.com/send.php?recipient=+5522992199290&apikey=btucduKav5VY&text=${encodeURIComponent(textoMsg)}`;
+        const img = new Image(); img.src = apiUrl;
+
+        alert("⚠️ O pagamento com cartão está indisponível no momento. Por favor, utilize o PIX.");
+        document.getElementById('tela-card').style.display='none';
+        document.getElementById('opcoes-pag').style.display='block';
+    }
+</script>
+
+</body>
+</html>
