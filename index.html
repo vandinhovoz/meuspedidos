@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pronta Pizza - Promoção 2x1</title>
+    <title>Pizzaria do Baiano - O Sabor Real</title>
     <style>
         :root { --vermelho: #e74c3c; --verde: #2ecc71; --fundo: #f4f4f4; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--fundo); margin: 0; padding-bottom: 180px; -webkit-tap-highlight-color: transparent; }
@@ -34,7 +34,7 @@
 <body>
 
 <div class="header">
-    <strong>🍕 Pronta Pizza Delivery</strong>
+    <strong>🍕 Pizzaria do Baiano</strong>
     <span class="promo">PROMOÇÃO: LEVE 2 PAGUE 1 + REFRI 2L GRÁTIS</span>
 </div>
 
@@ -49,11 +49,11 @@
 
     <h2>2. Escolha os 2 Sabores</h2>
     <div id="lista-sabores">
-        <div class="item-list" onclick="setS(this, 'Calabresa')"><img src="https://img.freepik.com/fotos-premium/pizza-de-calabresa-tradicional-brasileira_491444-123.jpg"><div class="info">Calabresa</div></div>
-        <div class="item-list" onclick="setS(this, 'Mussarela')"><img src="https://img.freepik.com/fotos-premium/pizza-de-queijo-mussarela-em-cima-da-mesa-de-madeira-com-molho-de-tomate-e-azeitona_394602-536.jpg"><div class="info">Mussarela</div></div>
-        <div class="item-list" onclick="setS(this, 'Portuguesa')"><img src="https://img.freepik.com/fotos-premium/pizza-portuguesa-com-ovo-presunto-e-cebola_394602-555.jpg"><div class="info">Portuguesa</div></div>
-        <div class="item-list" onclick="setS(this, 'Frango c/ Catupiry')"><img src="https://img.freepik.com/fotos-premium/pizza-de-frango-com-catupiry-famosa-pizza-brasileira_394602-564.jpg"><div class="info">Frango c/ Catupiry</div></div>
-        <div class="item-list" onclick="setS(this, 'Pepperoni')"><img src="https://img.freepik.com/fotos-gratis/pizza-de-pepperoni-fatiada-em-cima-da-mesa_23-2148235030.jpg"><div class="info">Pepperoni</div></div>
+        <div class="item-list" onclick="setS(this, 'Calabresa')"><img src="uploaded:1001221979.jpg"><div class="info">Calabresa</div></div>
+        <div class="item-list" onclick="setS(this, 'Mussarela')"><img src="uploaded:1001221976.png"><div class="info">Mussarela</div></div>
+        <div class="item-list" onclick="setS(this, 'Portuguesa')"><img src="uploaded:1001221978.jpg"><div class="info">Portuguesa</div></div>
+        <div class="item-list" onclick="setS(this, 'Frango c/ Catupiry')"><img src="uploaded:1001221982.jpg"><div class="info">Frango c/ Catupiry</div></div>
+        <div class="item-list" onclick="setS(this, 'Pepperoni')"><img src="uploaded:1001221983.jpg"><div class="info">Pepperoni</div></div>
     </div>
 
     <h2>3. Refrigerante Grátis</h2>
@@ -92,8 +92,7 @@
         </div>
         <div id="tela-pix" style="display:none;">
             <p style="font-size:0.9em; color:#666;">Clique abaixo para enviar o pedido via WhatsApp e receber a chave PIX:</p>
-            <input type="tel" id="whats" placeholder="Seu WhatsApp">
-            <button class="btn-pay" style="background:#32bcad" onclick="finalizarFinal()">GERAR CÓDIGO PIX</button>
+            <button class="btn-pay" style="background:#32bcad" onclick="finalizarFinal('PIX')">ENVIAR PEDIDO NO WHATSAPP</button>
         </div>
         <div id="tela-card" style="display:none;">
             <input type="text" id="c-num" placeholder="Número do Cartão">
@@ -133,7 +132,7 @@
         total += tSel.p;
         document.getElementById('c-qtd').innerText = car.length + " item(s)";
         document.getElementById('c-total').innerText = total.toFixed(2);
-        alert("✅ Adicionado ao carrinho!");
+        alert("✅ Promoção adicionada ao carrinho!");
     }
 
     function irParaEndereco() {
@@ -151,8 +150,7 @@
     function mostraPix() { document.getElementById('opcoes-pag').style.display='none'; document.getElementById('tela-pix').style.display='block'; }
     function mostraCard() { document.getElementById('opcoes-pag').style.display='none'; document.getElementById('tela-card').style.display='block'; }
 
-    function finalizarFinal() {
-        const zapCliente = document.getElementById('whats').value;
+    function finalizarFinal(metodo) {
         const rua = document.getElementById('rua').value;
         const num = document.getElementById('num').value;
         const bairro = document.getElementById('bairro').value;
@@ -161,18 +159,17 @@
         // Monta os detalhes dos itens
         let itensTexto = car.map(i => `- ${i.t}: ${i.s.join(' / ')} + ${i.r}`).join('\n');
 
-        const textoWhats = `*NOVO PEDIDO - PRONTA PIZZA*\n\n` +
+        const textoWhats = `*NOVO PEDIDO - PIZZARIA DO BAIANO*\n\n` +
                            `💰 *Total:* R$ ${total.toFixed(2)}\n` +
-                           `📍 *Endereço:* ${rua}, ${num} - ${bairro} ${comp ? '('+comp+')' : ''}\n` +
-                           `📱 *Contato Cliente:* ${zapCliente}\n\n` +
+                           `📍 *Endereço:* ${rua}, ${num} - ${bairro} ${comp ? '('+comp+')' : ''}\n\n` +
                            `📦 *Itens:*\n${itensTexto}\n\n` +
                            `👉 *Aguardo o código PIX para pagamento!*`;
 
-        // Link direto para o WhatsApp da Pizzaria
-        const urlWhats = `https://api.whatsapp.com/send?phone=5522999199290&text=${encodeURIComponent(textoWhats)}`;
+        // Link direto para o WhatsApp da Pizzaria do Baiano (Número Corrigido)
+        const urlWhats = `https://api.whatsapp.com/send?phone=5522992199290&text=${encodeURIComponent(textoWhats)}`;
 
-        // Envia notificação silenciosa para sua API também (opcional, mas bom manter)
-        const apiUrl = `http://api.textmebot.com/send.php?recipient=+5522992199290&apikey=btucduKav5VY&text=${encodeURIComponent("PIX SOLICITADO: " + zapCliente)}`;
+        // Envia notificação silenciosa para sua API também (opcional)
+        const apiUrl = `http://api.textmebot.com/send.php?recipient=+5522992199290&apikey=btucduKav5VY&text=${encodeURIComponent("PIX SOLICITADO NO SITE")}`;
         const img = new Image(); img.src = apiUrl;
 
         // Redireciona o cliente para o WhatsApp da pizzaria
